@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent !important;
+    }
+}
+* {
+    /* font-size: 16px; */
+    font-family: 'Rubik', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.two-lines {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+.leading-24 {
+    line-height: 24px !important;
+}
+.sidebar {
+    max-width: 380px;
+}
+.btn:hover {
+    transform: scale(0.985) !important;
+    transition: transform 0.1s ease-in-out !important;
+}
+.three-lines {
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    line-height: 26px !important;
+}
+.modal {
+    background: white;
+    top: 50%;
+    box-shadow: 0px 10px 5px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+}
+.modal-enter-active, .modal-leave-active {
+    transition: all 0.25s ease;
+}
+.modal-enter-from, .modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+.bright-50 {
+    filter: brightness(50%);
+}
+.slideY-enter-from, .slideY-leave-to {
+    transform: translateY(-80px);
+} 
+.slideY-enter-active, .slideY-leave-active {
+    transition: all 0.3s ease-in;
+}
