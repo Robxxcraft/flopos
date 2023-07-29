@@ -32,10 +32,12 @@ const mutations = reactive({
         });
         if(cartExitst){
             if (cartExitst.quantity >= product.stock) {
-                return;
+                console.log('a')
+                return
             }
-            cartExitst.quantity += quantity;
-            return;
+            cartExitst.quantity += quantity
+            console.log('b')
+            return
         }
 
         return state.cart.unshift({
@@ -72,16 +74,22 @@ const mutations = reactive({
 
 const actions = reactive({
     addProductToCart({product, quantity}){
-        if (getters.cartItemsCount() >= 100) {
-            return;
-        }
         const cartExitst = state.cart.find(item => {
-            return item.product_id === product.id;
+            return item.product_id === product.id
         });
+        if (getters.cartItemsCount() >= 100) {
+            return
+        }
         if (cartExitst) {
-            if (cartExitst.quantity >= product.stock) {
-                return;
+            if (cartExitst.quantity+quantity >= cartExitst.stock) {
+                quantity = cartExitst.stock
+                api.post(`/api/cart/update/${cartExitst.id}`, {quantity: quantity})
+                mutations.UPDATE_QTY(cartExitst.id, quantity)
+                return
             }
+        }
+        if (quantity >= product.stock) {
+            quantity = product.stock
         }
         mutations.ADD_TO_CART(product, quantity);
         api.post('/api/cart', {

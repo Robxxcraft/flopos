@@ -20,7 +20,7 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('quantity');
 
             $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade');
-            $table->foreign('product_id')->on('products')->references('id')->onDelete('cascade');
+            $table->foreign('product_id')->on('products')->references('id')->onDelete('set null');
         });
     }
 

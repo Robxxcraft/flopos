@@ -23,7 +23,7 @@ class ProductController extends Controller{
     public function admin(Request $request){
         $products = Product::with('category')->when($request->has('search'), function($q)use($request){
             $q->where('title', 'like', '%'.$request->search.'%')->orWhere('description', 'like', '%'.$request->search.'%')->orWhere('price', 'like', '%'.$request->search.'%')->orWhere('price', 'like', '%'.$request->search.'%')->orWhere('stock', 'like', '%'.$request->search.'%')->orWhere('id', (int)$request->search);
-        })->latest()->simplePaginate(10);
+        })->latest()->paginate(10);
         return ProductResource::collection($products);
     }
 

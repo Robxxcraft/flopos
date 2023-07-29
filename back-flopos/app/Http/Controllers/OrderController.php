@@ -98,7 +98,6 @@ class OrderController extends Controller
                 break;
         }
 
-
         $order = Order::create([
             'token' => Str::random(20),
             'user_id' => Auth::user('sanctum')->id,

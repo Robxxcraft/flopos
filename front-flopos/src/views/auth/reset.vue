@@ -12,7 +12,8 @@
                         <div class="relative">
                             <label class="block text-gray-700 transition duration-500 font-bold mb-1 ml-3">Email</label>
                             <input type="email" autocomplete="true" v-model="form.email" class="bg-white py-2 mb-2 rounded w-full text-gray-700 focus:outline-none border-2 focus:border-blue-300 transition duration-300 px-3 pb-3">
-                            <div v-if="errors.email" class="pl-1 absolute text-red-500 hover:text-red-600 text-sm italic">{{ errors.email[0] }}</div>
+                            <div v-if="errors.email" class="pl-1 absolute text-red-500 hover:text-red-600 text-sm italic">
+                                {{ errors.email[0] }}</div>
                         </div>
                         <div class="relative">
                             <label class="block text-gray-700 transition duration-500 font-bold mb-1 ml-3">Password</label>
@@ -27,7 +28,8 @@
                                     </template>
                                 </div>
                             </div>
-                            <div v-if="errors.password" class="pl-1 absolute text-red-500 text-sm italic">{{ errors.password[0] }}</div>
+                            <div v-if="errors.password" class="pl-1 absolute text-red-500 text-sm italic">
+                                {{ errors.password[0] }}</div>
                         </div>
                     </div>
                     <router-link to="/forgot" class="flex justify-end text-sm text-gray-600 hover:text-blue-700 hover:underline mt-5 mb-3">Forgot your password?</router-link>

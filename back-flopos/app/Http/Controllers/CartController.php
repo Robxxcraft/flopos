@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 class CartController extends Controller
 {
     public function index(){
-        $cart = Cart::with('product')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        $cart = Cart::with('product')->where('user_id', Auth::user()->id)->latest()->get();
         return response()->json(CartResource::collection($cart), 200);
     }
 

@@ -25,7 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('zipcode');
             $table->timestamps();
 
-            $table->foreign('user_id')->on('users')->references('id')->onDelete('cascade');
+            $table->foreign('user_id')->on('users')->references('id')->onDelete('set null');
         });
     }
 

@@ -1,0 +1,13 @@
+/back-flopos/vendor
+/front-flopos/node_modules
+/public/hot
+/public/storage
+/back-flopos/storage/*.key
+/back-flopos/.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+/front-flopos/npm-debug.log
+/front-flopos/yarn-error.log
+/.idea
+/.vscode

@@ -122,6 +122,7 @@
 import { computed, onMounted, ref  } from "vue";
 import api from '../../../axios';
 import Header from '../../../components/header.vue'
+import helper from '../../../helper'
 export default {
   components: {
     Header
@@ -132,10 +133,11 @@ export default {
     const search = ref('')
     const nextLink = ref(null)
     const sloading = ref(false)
+    const { currencyFormat } = helper()
     const getOrders = (page) => {
       sloading.value = true
+      currentPage.value = page
       api.get(`/api/admin/orders?page=${page}&search=${search.value}`).then(res => {
-        currentPage.value = page
         orders.value = res.data.data
         nextLink.value = res.data.links.next
         scrollTo(0,0)
@@ -171,9 +173,6 @@ export default {
       }
       return arr
     })
-    const currencyFormat = (n)=>{
-      return n.toLocaleString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    }
     return { currentPage, pagination, search, searching, nextLink, sloading, orders, getOrders, deleteOrder, currencyFormat }
   }
 }

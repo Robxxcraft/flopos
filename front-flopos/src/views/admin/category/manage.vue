@@ -129,6 +129,7 @@ export default {
     const sloading = ref(false)
     const getCategories = (page) => {
       sloading.value = true
+      currentPage.value = page
       api.get(`/api/categories?page=${page}&search=${search.value}`).then(res => {
         currentPage.value = page
         categories.value = res.data.data

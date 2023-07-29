@@ -60,7 +60,7 @@
                   </td>
                   <td class="p-3 text-gray-800 font-medium whitespace-nowrap">{{product.category}}</td>
                   <td class="p-3 text-gray-800 font-medium whitespace-nowrap">{{product.description}}</td>
-                  <td class="p-3 text-blue-500 font-medium whitespace-nowrap">${{product.price}}</td>
+                  <td class="p-3 text-blue-500 font-medium whitespace-nowrap">{{'$'.product.price}}</td>
                   <td class="p-3 text-gray-800 font-medium whitespace-nowrap">{{stockFormat(product.stock)}}</td>
                   <td class="p-3 text-gray-800 font-medium whitespace-nowrap">{{product.created_at}}</td>
                   <td class="p-3 whitespace-nowrap">
@@ -146,19 +146,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-8 flex items-center justify-end space-x-2 text-blue-500">
-        <button class="h-8 w-8 hover:text-blue-800 focus:outline-none" v-if="currentPage > 1" @click="getProducts(currentPage - 1)">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-        </button>
-        <div class="space-x-1">
-          <template v-for="(page, index) in pagination" :key="index">
-            <button :class="page === currentPage ? 'bg-blue-500 shadow-sm hover:shadow-md focus:outline-none text-white border border-blue-500 py-1 px-3 rounded' : 'hover:bg-blue-500 shadow-sm hover:text-white hover:shadow-md focus:outline-none border border-blue-500 py-1 px-3 rounded'" @click="getProducts(page)">{{page}}</button>
-          </template>
-        </div>
-        <button class="h-8 w-8 hover:text-blue-800 focus:outline-none" v-if="nextLink" @click="getProducts(currentPage + 1)">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-        </button>
-      </div>
+      <Pagination />
     </div>
   </div>
 </template>
@@ -168,24 +156,30 @@ import { computed, onMounted, ref  } from "vue";
 import api from '../../../axios';
 import Header from '../../../components/header.vue'
 import Toast from '../../../components/toast.vue'
+import ToastStore from '../../../store/toast'
+import Pagination from '../../../components/pagination.vue'
+import helper from '../../../helper'
 export default {
   components: {
     Header,
-    Toast
+    Toast,
+    Pagination,
   },
-  props: ['toast'],
-  setup(props) {
-    const toast = ref(false)
-    const toastContent = ref('')
+  setup() {
+    const toast = ref({
+      status: false,
+      content: '',
+    })
     const products = ref([])
     const currentPage = ref(1)
     const search = ref('')
     const nextLink = ref(null)
     const sloading = ref(false)
+    const { currencyFormat, stockFormat } = helper()
     const getProducts = (page) => {
       sloading.value = true
+      currentPage.value = page
       api.get(`/api/admin/products?page=${page}&search=${search.value}`).then(res => {
-        currentPage.value = page
         products.value = res.data.data
         nextLink.value = res.data.links.next
         scrollTo(0,0)
@@ -193,14 +187,15 @@ export default {
       })
     }
 
-    function removeToast(){
+    const removeToast = () => {
       toast.value = false
     }
+
     onMounted(() => {
-      if (props.toast) {
-        toast.value = true
-        toastContent.value = props.toast
-        setTimeout(removeToast, 3000)
+      if (ToastStore.state.toast) {
+        toast.value.status = true
+        toast.value.content = toastStore.state.toast
+        setTimeout(removeToast, 2000)
       }
       getProducts(currentPage.value)
     })
@@ -233,23 +228,6 @@ export default {
       }
       return arr
     })
-
-    const currencyFormat = (n)=>{
-      return n.toLocaleString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    }
-
-    function round(n, precision){
-      var prec = Math.pow(10, precision)
-      return Math.round(n*prec)/prec
-    }
-
-    const stockFormat = (value)=>{
-      let abbrev = ['k','m','b']
-      let base = Math.floor(Math.log(Math.abs(value))/Math.log(1000))
-      let suffix = abbrev[Math.min(2, base-1)]
-      base = abbrev.indexOf(suffix)+1
-      return suffix ? round(value/Math.pow(1000, base), 2)+suffix:''+value
-    }
 
     return { toast, toastContent, currentPage, pagination, search, searching, nextLink, sloading, products, getProducts, deleteProduct, currencyFormat, stockFormat }
   }

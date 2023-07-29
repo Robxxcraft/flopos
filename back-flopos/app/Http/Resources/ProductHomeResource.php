@@ -22,7 +22,8 @@ class ProductHomeResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'photo' => $this->photo,
-            'favorited' => $this->favorited_count
+            'favorited' => $this->favorited_count,
+            'created_at' => \Carbon\Carbon::parse($this->created_at)->locale('id')->translatedFormat('d F Y')
         ];
     }
 }
