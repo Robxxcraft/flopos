@@ -10,9 +10,6 @@ const state = reactive({
 const getters = {
     getStatus() {
         return state.toast.status
-    },
-    getToast() {
-        return state.toast.content
     }
 }
 

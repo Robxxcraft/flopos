@@ -1,6 +1,6 @@
 {
-  "name": "technical-test-front",
-  "version": "0.0.0",
+  "name": "front-flopos",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",

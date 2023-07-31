@@ -1,5 +1,5 @@
 export default function helper() {
-  const currencyFormat = (n) => {
+  const currencyFormat = (n=0) => {
     return n.toLocaleString().replace(/\d(?=(\d{3})+\.)/g, "$&,")
   }
 
@@ -8,7 +8,7 @@ export default function helper() {
     return Math.round(n * prec) / prec
   }
 
-  const stockFormat = (value) => {
+  const stockFormat = (value=0) => {
     let abbrev = ["k", "m", "b"]
     let base = Math.floor(Math.log(Math.abs(value)) / Math.log(1000))
     let suffix = abbrev[Math.min(2, base - 1)]

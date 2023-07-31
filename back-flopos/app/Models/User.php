@@ -42,7 +42,15 @@ class User extends Authenticatable
     ];
 
     public function cart(){
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Cart::class)->with('product.category')->paginate(10);
+    }
+    
+    public function cartAll(){
+        return $this->hasMany(Cart::class)->with('product');
+    }
+
+    public function cartTotalQuantity(){
+        return $this->hasMany(Cart::class)->sum('quantity');
     }
     
     public function favourite(){

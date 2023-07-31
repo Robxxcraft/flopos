@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FavoritedResource;
+use App\Http\Resources\ProductHomeResource;
 use App\Models\Favorite;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function index(){
-        $products = Product::whereHas('favorite', function($q){ $q->where('user_id', Auth::user()->id); })->with('category')->latest()->simplePaginate(12);
-        return FavoritedResource::collection($products);
+    public function index(Request $request){
+        $products = Product::whereHas('favorite', function($q){ $q->where('user_id', Auth::user()->id); })->with('category')->withCount('favorited')->when($request->has('search'), function($q)use($request){
+            $q->where('title', 'like', '%'.$request->search.'%')->orWhere('price', 'like', '%'.$request->search.'%')->orWhere('stock', 'like', '%'.$request->search.'%');
+        })->when($request->has('sortColumn') && $request->has('sortType'), function($q)use($request){
+            $q->orderBy($request->sortColumn, $request->sortType);
+        })->latest()->simplePaginate(12);
+        return ProductHomeResource::collection($products);
     }
 
     public function add($id){

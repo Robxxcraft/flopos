@@ -18,7 +18,7 @@
     </div>
 
     <!-- main -->
-    <div class="main lg:w-full lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-2">
+    <div class="main lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-2">
       <div class="lg:hidden w-full px-4 md:px-8 py-4 mb-5 bg-white flex justify-between">
         <div class="font-bold text-blue-500">Flopos</div>
         <div class="flex items-end gap-6">
@@ -38,32 +38,32 @@
       <div class="px-4 md:px-8 font-bold text-gray-800 text-xl md:mt-8 mb-8">Checkout</div>
       <div class="px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div class="relative">
-          <div class="font-medium text-gray-600 mb-1">Phone</div>
+          <div class="font-medium text-gray-600 mb-2">Phone</div>
           <div class="w-full relative">
-            <div class="absolute top-2 font-medium mx-3 text-gray-600">+62</div>
-            <input type="text" name="phone" placeholder="8986332827" v-model="form.phone_number" class="pl-12 text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border">
+            <div class="absolute codephone font-medium mx-3 text-gray-600">+62</div>
+            <input type="text" name="phone" placeholder="8986332827" v-model="form.phone_number" class="pl-12 text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
           </div>
           <div v-if="errors.phone_number" class="p-1 absolute text-red-500 text-sm italic">{{errors.phone_number[0]}}</div>
         </div>
         <div class="relative">
-          <div class="font-medium text-gray-600 mb-1">Zipcode</div>
+          <div class="font-medium text-gray-600 mb-2">Zipcode</div>
           <div class="w-full">
-            <input type="text" name="zipcode" placeholder="17320" v-model="form.zipcode" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border">
+            <input type="text" name="zipcode" placeholder="17320" v-model="form.zipcode" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
           </div>
           <div v-if="errors.zipcode" class="p-1 absolute text-red-500 text-sm italic">{{errors.zipcode[0]}}</div>
         </div>
         <div class="relative">
-          <div class="font-medium text-gray-600 mb-1">Address</div>
+          <div class="font-medium text-gray-600 mb-2">Address</div>
           <div class="w-full">
-            <textarea type="text" name="address" placeholder="Taman Rahayu Regency 2 A8/NO15, Bekasi, West Java" v-model="form.address" rows="3" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border"></textarea>
+            <textarea type="text" name="address" placeholder="Taman Rahayu Regency 2 A8/NO15, Bekasi, West Java" v-model="form.address" rows="3" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100"></textarea>
           </div>
           <div v-if="errors.address" class="p-1 absolute text-red-500 text-sm italic">{{errors.address[0]}}</div>
         </div>
       </div>
       <div class="px-4 md:px-8 font-semibold text-gray-600 mb-4">Send with</div>
       <div class="pb-8 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 px-4 md:px-16 select-none relative">
-        <button v-for="(courier, index) in couriers" :key="index" @click="form.courier = courier.name" :class="`${form.courier == courier.name?'bg-green-200 border-green-300':'bg-white'} focus:outline-none flex items-center h-28 md:h-48 lg:h-auto justify-center border-2 hover:border-green-300 rounded p-6 md:p-9`">
-          <img :src="require(`../assets/image/${courier.name}.png`)" class="w-40">
+        <button v-for="(courier, index) in couriers" :key="index" @click="form.courier = courier.name" :class="`${form.courier == courier.name?'bg-blue-200 border-blue-300':'bg-white'} focus:outline-none flex items-center h-28 md:h-48 lg:h-auto justify-center border-2 hover:border-blue-300 rounded p-6 md:p-9`">
+          <img :src="courier.img" class="w-40">
         </button>
         <div v-if="errors.courier" class="p-1 absolute bottom-0 text-red-500 text-sm italic">{{errors.courier[0]}}</div>  
       </div>
@@ -72,18 +72,17 @@
     <!-- sidebar -->
     <div class="lg:basis-3/12 max-h-screen relative">
       <div class="lg:h-screen lg:fixed lg:max-w-sm lg:w-full">
-
           <div class="font-bold text-gray-800 text-xl px-8 mt-8">Summary</div>
         <div class="px-8">
-          <div class="flex items-end justify-between mt-4">
+          <div class="flex items-end justify-between mt-4 pb-1 mb-3 border-b">
             <div class="font-medium text-gray-600">Total Quantity</div>
-            <div class="font-bold text-lg text-gray-700">{{totalQuantity}}</div>
+            <div class="font-bold text-lg text-gray-700">{{stockFormat(totalQuantity)}} pcs</div>
           </div>
-          <div class="flex items-end justify-between mt-1">
+          <div class="flex items-end justify-between mt-1 pb-1 mb-3 border-b">
             <div class="font-medium text-gray-600">Total Price</div>
             <div class="font-bold text-lg text-gray-700">${{currencyFormat(grandTotal)}}</div>
           </div>
-          <div class="flex items-end justify-between mt-1">
+          <div class="flex items-end justify-between mt-1 pb-1 mb-3 border-b">
             <div class="font-medium text-gray-600">Courier</div>
             <div class="font-bold text-lg text-gray-700">${{courierPrice}}</div>
           </div>
@@ -104,9 +103,13 @@
 
         <div class="lg:absolute bottom-0 w-full px-8 mb-8">
           <div class="mt-28 flex items-end justify-between">
-          <div class="font-medium leading-5 text-gray-600">Grand Total</div>
-          <div class="font-bold text-xl text-blue-500">${{currencyFormat(grandTotal+courierPrice)}}</div>
-        </div>
+            <div class="font-medium leading-5 text-gray-600">Estimated</div>
+            <div class="font-bold text-lg text-gray-700">12 hour</div>
+          </div>
+          <div class="mt-2 flex items-end justify-between">
+            <div class="font-medium leading-5 text-gray-600">Grand Total</div>
+            <div class="font-bold text-xl text-blue-500">${{currencyFormat(grandTotal+courierPrice)}}</div>
+          </div>
         
         <button :disabled="loading" class="btn w-full focus:outline-none mt-6 py-2 px-8 bg-blue-500 text-white font-semibold rounded text-center" @click="sendOrder">
           <template v-if="loading">
@@ -117,7 +120,7 @@
             </svg>
         </template>
         <template v-else>
-        Send order
+          Send order
         </template>
         </button>
         </div>
@@ -127,14 +130,16 @@
 </template>
 
 <script>
-import { reactive, ref } from '@vue/reactivity';
-import { useRouter } from 'vue-router';
-import api from '../axios';
-import Iconbar from "../components/iconbar.vue";
-import Toast from "../components/toast.vue";
-import cart from "../store/cart";
-import { computed } from '@vue/runtime-core';
-import auth from '../store/auth';
+import { reactive, ref } from '@vue/reactivity'
+import { useRouter } from 'vue-router'
+import api from '../axios'
+import Iconbar from "../components/iconbar.vue"
+import Toast from "../components/toast.vue"
+import cart from "../store/cart"
+import { computed } from '@vue/runtime-core'
+import auth from '../store/auth'
+import helper from '../helper'
+import { onMounted } from 'vue'
 export default {
   components: {
     Iconbar,
@@ -144,30 +149,37 @@ export default {
     const router = useRouter()
     const loading = ref(false)
     const couriers = ref([{
-      name: 'GoSend',
+      name: "GoSend",
+      img: "src/assets/image/GoSend.png",
       cost: 7,
     },
     {
-      name: 'JnE',
+      name: "JnE",
+      img: 'src/assets/image/JnE.png',
       cost: 5,
     },
     {
-      name: 'JnT',
+      name: "JnT",
+      img: 'src/assets/image/JnT.png',
       cost: 6,
     },
     {
-      name: 'Sicepat',
+      name: "Sicepat",
+      img: 'src/assets/image/Sicepat.png',
       cost: 8,
     }])
     const form = reactive({
-      phone_number: null,
+      phone: null,
       zipcode: '',
       address: '',
       courier: 'GoSend',
       payment: 'Cash'
     })
     const courierPrice = computed(()=>{
-      return couriers.value.find(i => { return i.name === form.courier; }).cost
+      let courier = couriers.value.find(i => { return i.name === form.courier; })
+      if (courier) {
+        return courier.cost
+      }
     })
     const errors = ref({})
     const toast = ref(false)
@@ -185,13 +197,23 @@ export default {
       return cart.state.cart
     })
 
+    const {currencyFormat, stockFormat} = helper()
+
+    onMounted(()=>{
+      if (!cart.state.data) {
+        cart.actions.getCart(1)
+      }
+    })
+
     const sendOrder = ()=>{
-      loading.value = false
+      loading.value = true
       api.post('/api/orders', form).then(()=>{
+        loading.value = false
         router.push({name: 'Home', params: {toast: true}})
       }).catch(err => {
+        loading.value = false
         toast.value = true
-        function removeToast(){
+        const removeToast = ()=>{
           toast.value = false
         }
         setTimeout(removeToast, 3000)
@@ -201,17 +223,15 @@ export default {
         loading.value = false
       })
     }
+    
 
-    const openNav = ()=>{
-      document.querySelector('.navbar').classList.toggle('-translate-x-full')
-      document.querySelector('.main').classList.toggle('bright-50')
-    }
-
-    const currencyFormat = (n)=>{
-      return n.toLocaleString().replace(/\d(?=(\d{3})+.)/g, '$&,');
-    }
-
-    return { couriers, user, carts, courierPrice, form, sendOrder, errors, totalQuantity, grandTotal, toast, openNav, currencyFormat, loading }
+    return { couriers, user, carts, courierPrice, form, sendOrder, errors, totalQuantity, grandTotal, toast, currencyFormat, stockFormat, loading }
   },
 }
 </script>
+
+<style>
+.codephone {
+  top: 22.5%;
+}
+</style>

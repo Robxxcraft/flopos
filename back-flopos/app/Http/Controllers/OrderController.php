@@ -46,7 +46,7 @@ class OrderController extends Controller
     }
 
     public function userOrders(){
-        $orders = Order::where('user_id', Auth::user()->id)->with('user')->get();
+        $orders = Order::where('user_id', Auth::user()->id)->with('user')->latest()->paginate(10);
         
         return userOrderResource::collection($orders);
     }
@@ -59,7 +59,7 @@ class OrderController extends Controller
 
     public function create(Request $request){
         $request->validate([
-            'phone_number' => 'required|numeric',
+            'phone' => 'required|numeric',
             'address' => 'required|min:5|max:400',
             'zipcode' => 'required|numeric',
             'courier' => 'required',
@@ -68,7 +68,7 @@ class OrderController extends Controller
         ]);
         
 
-        $carts = Cart::where('user_id', auth()->user('sanctum')->id)->with('product')->get();
+        $carts = Auth::user('sanctum')->cartAll();
         if ($carts->count() < 1) {
             throw ValidationException::withMessages(['product' => 'Min 1 product to create order']);
         }
@@ -101,7 +101,7 @@ class OrderController extends Controller
         $order = Order::create([
             'token' => Str::random(20),
             'user_id' => Auth::user('sanctum')->id,
-            'phone_number' => $request->phone_number,
+            'phone' => $request->phone,
             'address' => $request->address,
             'zipcode' => $request->zipcode,
             'total_quantity' => $total_quantity,

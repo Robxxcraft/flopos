@@ -21,6 +21,7 @@
             <th class="p-3 font-semibold tracking-wide">Total Quantity</th>
             <th class="p-3 font-semibold tracking-wide">Courier</th>
             <th class="p-3 font-semibold tracking-wide">Payment</th>
+            <th class="p-3 font-semibold tracking-wide">Phone</th>
             <th class="p-3 font-semibold tracking-wide">Address</th>
             <th class="p-3 font-semibold tracking-wide">Zipcode</th>
             <th class="p-3 font-semibold tracking-wide">Created At</th>
@@ -32,12 +33,16 @@
               <tr class="row" v-for="(order, index) in orders" :key="index">
                 <td class="p-3 text-center hover:underline hover:text-blue-500 text-sm text-gray-600 font-medium">{{order.id}}</td>
                 <td class="text-center py-3">
-                  <div class="btn text-white bg-blue-500 font-medium inline-block text-sm rounded-3xl px-4 py-2">{{order.token}}</div>
+                  <div class="btn text-white bg-blue-500 font-medium inline-block text-sm rounded px-2 py-1">{{order.token}}</div>
                 </td>
                 <td class="text-center text-blue-500 font-medium text-sm  p-3">${{currencyFormat(order.total_amount)}}</td>
                 <td class="text-center text-gray-600 font-medium text-sm p-3">{{currencyFormat(order.total_quantity)}}</td>
                 <td class="text-center text-gray-600 font-medium text-sm p-3">{{order.courier}}</td>
                 <td class="text-center text-gray-600 font-medium text-sm p-3">{{order.payment}}</td>
+                <td class="text-center text-gray-600 font-medium p-3 whitespace-nowrap">
+                  <span class="mr-1">+62</span>
+                  {{order.phone}}
+                </td>
                 <td class="p-3">
                   <div class="truncate font-medium text-gray-500 three-lines bg-white rounded p-2 text-sm">{{order.address}}</div>
                 </td>
@@ -85,16 +90,17 @@
         </tbody>
     </table>
     </div>
-    <div class="block lg:hidden flex flex-col space-y-4 my-6">
+    <div class="block lg:hidden space-y-4 my-6">
       <div v-for="(order, index) in orders" :key="index" class="bg-white rounded p-4">
         <div class="flex justify-between items-center">
           <div class="font-semibold leading-5 text-blue-500 truncate">{{order.token}}</div>
           <div class="mt-1 font-medium text-sm text-gray-600">{{order.courier}}</div>
         </div>
         <div class="text-sm font-medium text-gray-500">{{order.created_at}}</div>
-        <div class="text-sm mt-3"><span class="font-medium text-gray-600 mr-3">Total Quantity</span><span class="font-semibold text-gray-700">{{currencyFormat(order.total_quantity)}}</span></div>
-        <div class="text-sm mt-3"><span class="font-medium text-gray-600 mr-3">Total Amount</span><span class="font-semibold text-blue-500">${{currencyFormat(order.total_amount)}}</span></div>
-        <div class="mt-4 mb-6 text-sm text-gray-500 bg-gray-100 rounded p-2">{{order.address}},<span class="ml-1 font-medium">{{order.zipcode}}</span></div>
+        <div class="text-sm mt-3"><span class="font-medium text-gray-600 mr-3">Phone</span><span class="mr-1 font-semibold text-gray-700">+62</span>{{order.phone}}</div>
+        <div class="text-sm mt-1.5"><span class="font-medium text-gray-600 mr-3">Total Quantity</span><span class="font-semibold text-gray-700">{{currencyFormat(order.total_quantity)}}</span></div>
+        <div class="text-sm mt-1.5"><span class="font-medium text-gray-600 mr-3">Total Amount</span><span class="font-semibold text-blue-500">${{currencyFormat(order.total_amount)}}</span></div>
+        <div class="mt-3 mb-6 text-sm text-gray-500 bg-gray-100 rounded p-3">{{order.address}},<span class="ml-1 font-medium">{{order.zipcode}}</span></div>
         <div class="flex justify-end">
           <button @click.prevent="deleteOrder(order.id)" class="text-red-500 font-bold focus:outline-none hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/></svg></button>
         </div>

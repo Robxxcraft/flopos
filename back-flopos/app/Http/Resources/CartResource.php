@@ -24,6 +24,7 @@ class CartResource extends JsonResource
             'stock' => $this->product->stock,
             'photo' => $this->product->photo,
             'quantity' => $this->quantity,
+            'created_at' => \Carbon\Carbon::parse($this->created_at)->locale('id')->translatedFormat('d F Y')
         ];
     }
 }

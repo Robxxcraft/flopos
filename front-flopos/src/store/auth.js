@@ -13,9 +13,6 @@ const mutations = {
             return Promise.resolve(res.data.data)
         }).catch(err => {
             console.log(err)
-            // if (err) {
-            //     localStorage.removeItem('token')
-            // }
         });
     },
 }

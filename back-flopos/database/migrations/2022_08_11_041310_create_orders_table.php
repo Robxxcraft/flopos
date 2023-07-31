@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('total_quantity');
             $table->enum('courier', ['GoSend', 'JNE', 'JNT', 'Sicepat']);
             $table->enum('payment', ['Cash', 'Credit']);
+            $table->string('phone');
             $table->text('address');
             $table->string('zipcode');
             $table->timestamps();

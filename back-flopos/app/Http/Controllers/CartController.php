@@ -11,8 +11,11 @@ use Illuminate\Validation\ValidationException;
 class CartController extends Controller
 {
     public function index(){
-        $cart = Cart::with('product')->where('user_id', Auth::user()->id)->latest()->get();
-        return response()->json(CartResource::collection($cart), 200);
+        $cart = Auth::user()->cart();
+        $totalQuantity = Auth::user('sanctum')->cartTotalQuantity();
+        return CartResource::collection($cart)->additional(['meta' => [
+            'total_quantity' => (int) $totalQuantity
+        ]]);
     }
 
     public function store(Request $request){

@@ -36,9 +36,9 @@ const router = createRouter({
       meta: { auth: true }
     },
     {
-      path: '/listorder',
-      name: 'listorder',
-      component: () => import('../views/listorder.vue'),
+      path: '/list-order',
+      name: 'listOrder',
+      component: () => import('../views/listOrder.vue'),
       meta: { auth: true }
     },
     {

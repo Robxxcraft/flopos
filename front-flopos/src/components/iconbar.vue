@@ -3,17 +3,25 @@
         <div class="pt-8 mb-12 text-blue-500">
           <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.5 9c1 1.06 1.5 2.394 1.5 4 0 3.466-3.7 4.276-5.5 9-.667-.575-1-1.408-1-2.5 0-3.482 5-5.29 5-10.5zm-4-4c1.2 1.238 1.8 2.572 1.8 4 0 4.951-6.045 5.692-4.8 13C9.833 20.84 9 19.173 9 17c0-3.325 5.5-6 5.5-12zM10 1c1.333 1.667 2 3.167 2 4.5 0 6.25-8.5 8.222-4 16.5-2.616-.58-4.5-3-4.5-6C3.5 9.5 10 8.5 10 1z"/></svg>
         </div>
-        <router-link to="/" class="px-6 py-1 relative text-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8zm2-8v4h4V5h-4zm0 10v4h4v-4h-4zM5 5v4h4V5H5zm0 10v4h4v-4H5z"/></svg>
+        <router-link to="/" class="px-4 relative text-gray-500">
+            <div class="hover:bg-blue-50 py-1 px-2 rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8zm2-8v4h4V5h-4zm0 10v4h4v-4h-4zM5 5v4h4V5H5zm0 10v4h4v-4H5z"/></svg>
+            </div>
         </router-link>
-        <router-link to="/cart" class="mt-7 px-6 py-1 relative text-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 16V4H2V2h3a1 1 0 0 1 1 1v12h12.438l2-8H8V5h13.72a1 1 0 0 1 .97 1.243l-2.5 10a1 1 0 0 1-.97.757H5a1 1 0 0 1-1-1zm2 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm12 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+        <router-link to="/cart" class="mt-7 px-4 relative text-gray-500">
+          <div class="hover:bg-blue-50 py-1 px-2 rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 16V4H2V2h3a1 1 0 0 1 1 1v12h12.438l2-8H8V5h13.72a1 1 0 0 1 .97 1.243l-2.5 10a1 1 0 0 1-.97.757H5a1 1 0 0 1-1-1zm2 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm12 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+          </div>
         </router-link>
-        <router-link to="/favorite" class="mt-7 px-6 py-1 relative text-gray-500">
+        <router-link to="/favorite" class="mt-7 px-4 relative text-gray-500">
+          <div class="hover:bg-blue-50 py-1 px-2 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18.26l-7.053 3.948 1.575-7.928L.587 8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773 3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572 3.573 3.305-.949 4.773L12 15.968z"/></svg>
+          </div>
         </router-link>
-        <router-link to="/listorder" class="mt-7 px-6 py-1 relative text-gray-500">
+        <router-link to="/list-order" class="mt-7 px-4 relative text-gray-500">
+          <div class="hover:bg-blue-50 py-1 px-2 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 22H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v12h4v4a3 3 0 0 1-3 3zm-1-5v2a1 1 0 0 0 2 0v-2h-2zm-2 3V4H4v15a1 1 0 0 0 1 1h11zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2z"/></svg>
+          </div>
         </router-link>
 
         <div class="absolute bottom-0 pb-8">
@@ -39,10 +47,9 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from '@vue/runtime-core'
+import { computed, ref } from '@vue/runtime-core'
 import api from '../axios'
 import auth from '../store/auth'
-import cart from '../store/cart'
 import { onClickOutside } from '@vueuse/core'
 export default {
   setup() {
@@ -58,10 +65,6 @@ export default {
     })
     const carts = computed(()=>{
       return auth.state.user
-    })
-
-    onMounted(()=>{
-      cart.actions.getCart()
     })
 
     onClickOutside(iconbar, (e) => { 

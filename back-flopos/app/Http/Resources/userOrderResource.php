@@ -21,9 +21,10 @@ class userOrderResource extends JsonResource
             'total_quantity' => $this->total_quantity,
             'courier' => $this->courier,
             'payment' => $this->payment,
+            'phone' => $this->phone,
             'address' => $this->address,
             'zipcode' => $this->zipcode,
-            'created_at' => \Carbon\Carbon::parse($this->created_at)->locale('id')->translatedFormat('d F Y')
+            'created_at' => \Carbon\Carbon::parse($this->created_at)->locale('id')->translatedFormat('d M Y')
         ];
     }
 }

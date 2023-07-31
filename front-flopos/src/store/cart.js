@@ -2,45 +2,49 @@ import { reactive } from '@vue/reactivity';
 import api from "../axios";
 
 const state = reactive({
-    cart: [],
+    cart: {
+        data: [],
+        links: {},
+        meta: {},
+    }
 })
 
 const getters = reactive({
     cartItemsCount(){
-        return state.cart.length;
+        if (state.cart.meta) {
+            return state.cart.meta.total;
+        }
     },
     cartTotalPrice(){
-        let total = 0;
-        state.cart.forEach(item => {
-            total += item.price * item.quantity;
-        })
-        return total
+        if (state.cart.data) {
+            let total = 0;
+            state.cart.data.forEach(item => {
+                total += item.price * item.quantity;
+            })
+            return total
+        }
     },
     cartTotalQuantity(){
-        let total = 0;
-        state.cart.forEach(item => {
-            total += item.quantity;
-        })
-        return total
+        if (state.cart.meta) {
+            return state.cart.meta.total_quantity
+        }
     }
 })
 
 const mutations = reactive({
     ADD_TO_CART(product, quantity){
-        const cartExitst = state.cart.find(item => {
+        const cartExitst = state.cart.data.find(item => {
             return item.product_id === product.id;
         });
         if(cartExitst){
             if (cartExitst.quantity >= product.stock) {
-                console.log('a')
                 return
             }
             cartExitst.quantity += quantity
-            console.log('b')
             return
         }
 
-        return state.cart.unshift({
+        return state.cart.data.unshift({
             product_id: product.id,
             title: product.title, 
             slug: product.slug,
@@ -52,7 +56,7 @@ const mutations = reactive({
         })
     },
     UPDATE_QTY(id, quantity){
-        const cartExitst = state.cart.find(item => {
+        const cartExitst = state.cart.data.find(item => {
             return item.id === id;
         });
         if(quantity >= cartExitst.stock){
@@ -64,17 +68,21 @@ const mutations = reactive({
         state.cart = data;
     },
     REMOVE_CART(productId){
-        let index = state.cart.findIndex(pro => pro.id == productId)
-        state.cart.splice(index, 1)
+        let index = state.cart.data.findIndex(pro => pro.id == productId)
+        state.cart.data.splice(index, 1)
     },
     CLEAR_CART(){
-        state.cart = [];
+        state.cart = {
+            data: [],
+            links: {},
+            meta: {},
+        }
     }
 })
 
 const actions = reactive({
     addProductToCart({product, quantity}){
-        const cartExitst = state.cart.find(item => {
+        const cartExitst = state.cart.data.find(item => {
             return item.product_id === product.id
         });
         if (getters.cartItemsCount() >= 100) {
@@ -98,7 +106,7 @@ const actions = reactive({
         });
     },
     changeQuantity(id, quantity){
-        const cartExitst = state.cart.find(item => {
+        const cartExitst = state.cart.data.find(item => {
             return item.id === id;
         });
         if (cartExitst) {
@@ -109,11 +117,16 @@ const actions = reactive({
       api.post(`/api/cart/update/${id}`, {quantity: quantity})
       mutations.UPDATE_QTY(id, quantity)
     },
-    getCart(){
-        api.get('/api/cart').then(res => {
-            mutations.SET_CART(res.data);
+    getCart(page=1){
+        mutations.CLEAR_CART()
+        return new Promise((resolve, reject)=>{
+            api.get(`/api/cart?page=${page}`).then(res => {
+                mutations.SET_CART(res.data);
+                resolve(res.data);
+            }).catch(err => {
+                reject(err)            
+            })
         })
-        return Promise.resolve('');
     },
     removeCart(id){
         mutations.REMOVE_CART(id);
