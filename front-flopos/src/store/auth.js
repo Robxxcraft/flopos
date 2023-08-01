@@ -1,5 +1,5 @@
-import { reactive } from '@vue/reactivity';
-import api from "../axios";
+import { reactive } from '@vue/reactivity'
+import api from "../axios"
 
 const state = reactive({
     user: null,
@@ -13,7 +13,7 @@ const mutations = {
             return Promise.resolve(res.data.data)
         }).catch(err => {
             console.log(err)
-        });
+        })
     },
 }
 

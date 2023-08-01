@@ -1,12 +1,10 @@
 <template>
   <div class="flex min-h-screen">
     <!-- icon bar -->
-    <div class="max-h-screen lg:w-16">
-      <Iconbar />
-    </div>
+    <Iconbar />
 
     <!-- main -->
-    <div class="main w-full min-h-screen overflow-hidden bg-slate-100 lg:ml-2">
+    <div class="main w-full lg:w-8/12 bg-slate-100 mt-16 lg:mt-0 lg:ml-16 lg:pl-2 px-4 md:px-8">
       <div class="lg:hidden w-full px-4 py-3 bg-white flex justify-between">
         <div class="font-bold text-blue-500">Flopos</div>
         <div class="flex items-end gap-6">

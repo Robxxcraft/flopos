@@ -1,12 +1,10 @@
 <template>
   <div class="flex min-h-screen">
     <!-- icon bar -->
-    <div class="max-h-screen lg:w-16">
-      <Iconbar />
-    </div>
+    <Iconbar />
 
     <!-- main -->
-    <div class="main w-full lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-2 px-4 md:px-8">
+    <div class="main w-full lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-16 pl-2">
       <MobileHeader />
       <div class="my-5 lg:mt-8 font-bold text-gray-800 text-xl mb-6">Favorited</div>
       <div class="flex justify-between">

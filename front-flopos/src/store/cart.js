@@ -1,5 +1,5 @@
-import { reactive } from '@vue/reactivity';
-import api from "../axios";
+import { reactive } from '@vue/reactivity'
+import api from "../axios"
 
 const state = reactive({
     cart: {
@@ -12,21 +12,29 @@ const state = reactive({
 const getters = reactive({
     cartItemsCount(){
         if (state.cart.meta) {
-            return state.cart.meta.total;
+            if (state.cart.meta.total > 0) {
+                return state.cart.meta.total
+            } else {
+                return 0
+            }
         }
     },
     cartTotalPrice(){
         if (state.cart.data) {
-            let total = 0;
+            let total = 0
             state.cart.data.forEach(item => {
-                total += item.price * item.quantity;
+                total += item.price * item.quantity
             })
             return total
         }
     },
     cartTotalQuantity(){
         if (state.cart.meta) {
-            return state.cart.meta.total_quantity
+            if (state.cart.meta.total_quantity > 0) {
+                return state.cart.meta.total_quantity
+            } else {
+                return 0
+            }
         }
     }
 })
@@ -34,8 +42,8 @@ const getters = reactive({
 const mutations = reactive({
     ADD_TO_CART(product, quantity){
         const cartExitst = state.cart.data.find(item => {
-            return item.product_id === product.id;
-        });
+            return item.product_id === product.id
+        })
         if(cartExitst){
             if (cartExitst.quantity >= product.stock) {
                 return
@@ -57,15 +65,15 @@ const mutations = reactive({
     },
     UPDATE_QTY(id, quantity){
         const cartExitst = state.cart.data.find(item => {
-            return item.id === id;
-        });
+            return item.id === id
+        })
         if(quantity >= cartExitst.stock){
-            return cartExitst.quantity = quantity ;
+            return cartExitst.quantity = quantity 
         }
         cartExitst.quantity = quantity
     },
     SET_CART(data){
-        state.cart = data;
+        state.cart = data
     },
     REMOVE_CART(productId){
         let index = state.cart.data.findIndex(pro => pro.id == productId)
@@ -84,7 +92,7 @@ const actions = reactive({
     addProductToCart({product, quantity}){
         const cartExitst = state.cart.data.find(item => {
             return item.product_id === product.id
-        });
+        })
         if (getters.cartItemsCount() >= 100) {
             return
         }
@@ -99,16 +107,16 @@ const actions = reactive({
         if (quantity >= product.stock) {
             quantity = product.stock
         }
-        mutations.ADD_TO_CART(product, quantity);
+        mutations.ADD_TO_CART(product, quantity)
         api.post('/api/cart', {
             product_id : product.id,
             quantity
-        });
+        })
     },
     changeQuantity(id, quantity){
         const cartExitst = state.cart.data.find(item => {
-            return item.id === id;
-        });
+            return item.id === id
+        })
         if (cartExitst) {
             if (quantity >= cartExitst.stock) {
                 quantity = cartExitst.stock
@@ -121,20 +129,20 @@ const actions = reactive({
         mutations.CLEAR_CART()
         return new Promise((resolve, reject)=>{
             api.get(`/api/cart?page=${page}`).then(res => {
-                mutations.SET_CART(res.data);
-                resolve(res.data);
+                mutations.SET_CART(res.data)
+                resolve(res.data)
             }).catch(err => {
                 reject(err)            
             })
         })
     },
     removeCart(id){
-        mutations.REMOVE_CART(id);
+        mutations.REMOVE_CART(id)
         api.delete(`/api/cart/${id}`)
     },
     clearCart(){
-        mutations.CLEAR_CART();
-        api.delete('/api/cart-clear/');
+        mutations.CLEAR_CART()
+        api.delete('/api/cart-clear/')
     }
 })
 

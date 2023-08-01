@@ -16,7 +16,6 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('token');
-            $table->unsignedBigInteger('user_id');
             $table->bigInteger('total_amount');
             $table->bigInteger('total_quantity');
             $table->enum('courier', ['GoSend', 'JNE', 'JNT', 'Sicepat']);
@@ -26,7 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('zipcode');
             $table->timestamps();
 
-            $table->foreign('user_id')->on('users')->references('id')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

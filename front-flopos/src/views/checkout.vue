@@ -13,9 +13,7 @@
 </Transition>
   <div class="flex flex-col lg:flex-row min-h-screen">
     <!-- icon bar -->
-    <div class="max-h-screen lg:w-16">
-      <Iconbar />
-    </div>
+    <Iconbar />
 
     <!-- main -->
     <div class="main lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-2">

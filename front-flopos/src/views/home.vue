@@ -12,7 +12,7 @@
 
     <!-- main -->
     <div class="main w-full lg:w-8/12 bg-slate-100 mt-16 lg:mt-0 lg:ml-16 lg:pl-2 px-4 md:px-8">
-      <div class="lg:pl-8">
+      <div class="lg:ml-8">
         <!-- mobile navbar header -->
         <MobileHeader :user="user" />      
         <div class="my-5 lg:mt-8 flex flex-col lg:flex-row lg:items-end justify-between">

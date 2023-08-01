@@ -1,12 +1,10 @@
 <template>
   <div class="lg:flex min-h-screen">
     <!-- icon bar -->
-    <div class="max-h-screen lg:w-16">
-      <Iconbar />
-    </div>
+    <Iconbar />
 
     <!-- main -->
-    <div class="main w-full lg:w-auto lg:basis-9/12 bg-slate-100 pb-8 lg:pb-0 lg:ml-2">
+    <div class="main w-full lg:w-auto lg:basis-9/12 bg-slate-100 pb-8 lg:pb-0 lg:ml-16 px-4">
       <MobileHeader />
       <div class="my-5 lg:mt-8 px-4 md:px-8 font-bold text-gray-800 text-xl mb-6">Cart</div>
       <div class="px-4 md:px-8 flex justify-between">

@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import auth from '../store/auth'
+import { computed } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +109,20 @@ const router = createRouter({
     },
   
   ],
+})
+
+router.beforeEach( async (to, from, next) => {
+  await auth.mutations.getUser()
+  const isAuth = computed(()=> auth.state.user)
+  if (to.matched.some(record => record.meta.auth)) {
+    if (isAuth.value) next()
+    else next({path: "/login", query: { requireAuth: true }})
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (!isAuth.value) next()
+    else next({path: "/"})
+  } else {
+    next()
+  }
 })
 
 export default router
