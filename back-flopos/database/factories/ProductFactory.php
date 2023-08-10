@@ -16,7 +16,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         $productTitle = $this->faker->text(rand(10, 40));
-        $categoryLengthId = Category::all()->count();
+        $categoryLengthId = Category::count();
         return [
             'title' => $productTitle,
             'slug' => Str::slug($productTitle),

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Http\Resources\OrderRecentResource;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller{
     public function dashboard(){
@@ -14,22 +14,16 @@ class ChartController extends Controller{
         $weekly = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'),Carbon::now()->endOfWeek(Carbon::SATURDAY)->format('Y-m-d')])->sum('total_amount');
         $monthly = Order::whereMonth('created_at', Carbon::now()->format('m'))->sum('total_amount');
         $yearly = Order::whereYear('created_at', Carbon::now()->format('Y'))->sum('total_amount');
-        $data = (object) [
-            'daily' => (int)$daily,
-            'weekly' => (int)$weekly,
-            'monthly' => (int)$monthly,
-            'yearly' => (int)$yearly,
-        ];
-        return response()->json($data, 200);
-    }
 
-    public function chart(Order $order){
         $months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         $amount = [];
         $incomes = (int) Order::sum('total_amount');
-        $expense = (int) Product::sum(\DB::raw('price * stock'));
+        $expense = (int) Product::sum(DB::raw('price * stock'));
+        
+        $orders = Order::latest()->with('user')->take(3)->get();
+
         for($index=1; $index <= 12; $index++) { 
-            $amount[] = (int) $order->whereMonth('created_at', $index)->sum('total_amount');
+            $amount[] = (int) Order::whereMonth('created_at', $index)->sum('total_amount');
         }
         $charts = (object) [
             'months' => $months,
@@ -37,6 +31,17 @@ class ChartController extends Controller{
             'incomes' => $incomes,
             'expense' => $expense
         ];
-        return response()->json($charts, 200);
-    }   
+
+        $data = (object) [
+            'incomes' => (object)[
+                'daily' => (int)$daily,
+                'weekly' => (int)$weekly,
+                'monthly' => (int)$monthly,
+                'yearly' => (int)$yearly,
+            ],
+            'charts' => $charts,
+            'orders' => OrderRecentResource::collection($orders)
+        ];
+        return response()->json($data, 200);
+    }
 }
