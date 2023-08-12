@@ -1,27 +1,21 @@
 import { reactive } from 'vue'
 
 const state = reactive({
-    toast: {
-        status: false,
-        content: ''
-    },
+    status: false,
+    content: ''
 })
 
-const getters = {
-    getStatus() {
-        return state.toast.status
-    }
-}
-
 const mutations = {
-    setToast(payload) {
-        state.toast = payload
+    setToast(status, content) {
+        state.status = status
+        state.content = content
     },
     clearToast() {
-        state.toast = {status: false, content: ''}
+        state.status = false
+        state.content = ''
     },
 }
 
 export default {
-    state, getters, mutations
+    state, mutations
 }

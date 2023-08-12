@@ -17,7 +17,7 @@
           <div class="ml-2 font-bold tracking-wide text-blue-500">Back</div>
         </div>
       </router-link>
-      <div class="text-xl text-gray-800 font-bold mt-4 mb-2">Edit Product</div>
+      <div class="text-xl text-gray-800 font-bold mt-4 mb-2">Edit Product <span>{{'- '+id}}</span></div>
       <form class="lg:flex flex-wrap gap-16 w-full mx-auto py-8" @submit.prevent="updateProduct">
         <div class="basis-4/6">
           <div class="space-y-6 lg:space-y-0 lg:grid grid-cols-2 gap-8">
@@ -99,6 +99,7 @@ import api from '../../../axios';
 import { onMounted } from '@vue/runtime-core';
 import Header from '../../../components/header.vue'
 import Toast from '../../../components/toast.vue'
+import { computed } from 'vue';
 export default {
   components: {
     Header,
@@ -111,6 +112,7 @@ export default {
     const router = useRouter()
     const categories = ref([])
     const image = ref(null)
+    const id = computed(()=> route.params.id)
     const form = reactive({
       title: '',
       category: '',
@@ -182,7 +184,7 @@ export default {
       category.classList.remove('text-gray-400') && category.classList.toggle('text-gray-800')
     }
 
-    return { toast, toastContent, openDropdown, chooseCategory, updateProduct, categories, errors, form, image, prevImg }
+    return { id, toast, toastContent, openDropdown, chooseCategory, updateProduct, categories, errors, form, image, prevImg }
   }
 };
 </script>
