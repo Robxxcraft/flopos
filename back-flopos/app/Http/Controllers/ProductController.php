@@ -8,7 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductHomeResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+// use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,20 +53,21 @@ class ProductController extends Controller{
             'price' => $request->price,
             'stock' => $request->stock
         ]);
-        $uploadImg = Cloudinary::upload($request->file('photo')->getRealPath(), [
-                'folder' =>  'pos',
-                'public_id' => 'pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id,
-                'transformation' => [
-                    'width' => 600,
-                    'heigth' => 400,
-                ]
-            ]);
-            $product->photo = $uploadImg->getSecurePath();
-            $product->save();
 
-        if ($request->hasFile('photo')) {
-            
-        }
+        // deploy
+        // if ($request->hasFile('photo')) {
+        //     $uploadImg = Cloudinary::upload($request->file('photo')->getRealPath(), [
+        //         'folder' =>  'pos',
+        //         'public_id' => 'pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id,
+        //         'transformation' => [
+        //             'width' => 600,
+        //             'heigth' => 400,
+        //         ]
+        //     ]);
+        //     $product->photo = $uploadImg->getSecurePath();
+        //     $product->save();
+        // }
+
         return response()->json("Product created successfully", 200);
     }
 
@@ -95,27 +96,29 @@ class ProductController extends Controller{
             'price' => $request->price,
             'stock' => $request->stock
         ]);
-        if ($request->hasFile('photo')) {
-            Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
-            $uploadImg = Cloudinary::upload($request->file('photo')->getRealPath(), [
-                'folder' =>  'pos',
-                'public_id' => 'pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id,
-                'transformation' => [
-                    'width' => 600,
-                    'heigth' => 400,
-                ]
-            ]);
-            $product->photo = $uploadImg->getSecurePath();
-            $product->save();
-        }
+        // deploy
+        // if ($request->hasFile('photo')) {
+        //     Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
+        //     $uploadImg = Cloudinary::upload($request->file('photo')->getRealPath(), [
+        //         'folder' =>  'pos',
+        //         'public_id' => 'pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id,
+        //         'transformation' => [
+        //             'width' => 600,
+        //             'heigth' => 400,
+        //         ]
+        //     ]);
+        //     $product->photo = $uploadImg->getSecurePath();
+        //     $product->save();
+        // }
         return response()->json("Product created successfully", 200);
     }
 
     public function destroy($id){
         $product = Product::findOrFail($id);
-        if (isset($product->photo)) {
-            Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
-        }
+        // deploy
+        // if (isset($product->photo)) {
+        //     Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
+        // }
         $product->delete();
         return response()->json("Product deleted successfully", 200);
     }
