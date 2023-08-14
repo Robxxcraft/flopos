@@ -204,9 +204,7 @@ export default {
     Pagination,
   },
   setup() {
-    const toast = computed(()=> {
-      return toastStore.state
-    })
+    const toast = computed(()=> toastStore.state)
     const products = ref([])
     const paginationData = ref({
       currentPage: 1,
@@ -228,10 +226,6 @@ export default {
       })
     }
 
-    const removeToast = () => {
-      toastStore.mutations.clearToast()
-    }
-
     onMounted(() => {
       getProducts(paginationData.value.currentPage)
     })
@@ -242,8 +236,7 @@ export default {
 
     const deleteProduct = (id)=>{
       api.delete(`/api/products/${id}`).then(res=>{
-        toastStore.mutations.setToast(true, res.data)
-        setTimeout(removeToast, 3000)
+        toastStore.mutations.setToast('success', res.data)
       })
     }
 

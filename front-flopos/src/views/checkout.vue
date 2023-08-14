@@ -1,69 +1,53 @@
 <template>
-<Transition name="slideY">
-  <Toast v-if="toast" type="error">
-    <template #text>
-      <template v-if="errors.product">
-        {{errors.product[0]}}
-      </template> 
-      <template v-else>
-        Some error occured
+  <Transition name="slideY">
+    <Toast v-if="toast.status" :type="toast.type">
+      <template #text>
+        {{ toast.content }}
       </template>
-    </template>
-  </Toast>
-</Transition>
+    </Toast>
+  </Transition>
   <div class="flex flex-col lg:flex-row min-h-screen">
     <!-- icon bar -->
     <Iconbar />
 
     <!-- main -->
-    <div class="main lg:w-auto lg:basis-8/12 bg-slate-100 lg:ml-2">
-      <div class="lg:hidden w-full px-4 md:px-8 py-4 mb-5 bg-white flex justify-between">
-        <div class="font-bold text-blue-500">Flopos</div>
-        <div class="flex items-end gap-6">
-          <template v-if="user">
-            <router-link to="/cart">
-              <div class="flex gap-2 text-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 16V4H2V2h3a1 1 0 0 1 1 1v12h12.438l2-8H8V5h13.72a1 1 0 0 1 .97 1.243l-2.5 10a1 1 0 0 1-.97.757H5a1 1 0 0 1-1-1zm2 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm12 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
-                {{carts.length}}
-              </div>
-            </router-link>
-          </template>
-          <div class="text-blue-500" @click="openNav" id="navButton">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+    <div class="main w-full lg:w-8/12 bg-slate-100 mt-14 lg:mt-0 lg:ml-16 lg:px-2">
+      <!-- mobile navbar header -->
+      <MobileHeader /> 
+
+      <div class="mx-4 md:mx-6 lg:mx-8">
+        <div class="font-bold text-gray-800 text-xl md:mt-8 mb-8">Checkout</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div class="relative">
+            <div class="font-medium text-gray-600 mb-2">Phone</div>
+            <div class="w-full relative">
+              <div class="absolute codephone font-medium mx-3 text-gray-600">+62</div>
+              <input type="text" name="phone" placeholder="8986332827" v-model="form.phone" class="pl-12 text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
+            </div>
+            <div v-if="errors.phone" class="p-1 absolute text-red-500 text-sm italic">{{errors.phone[0]}}</div>
+          </div>
+          <div class="relative">
+            <div class="font-medium text-gray-600 mb-2">Zipcode</div>
+            <div class="w-full">
+              <input type="text" name="zipcode" placeholder="17320" v-model="form.zipcode" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
+            </div>
+            <div v-if="errors.zipcode" class="p-1 absolute text-red-500 text-sm italic">{{errors.zipcode[0]}}</div>
+          </div>
+          <div class="relative">
+            <div class="font-medium text-gray-600 mb-2">Address</div>
+            <div class="w-full">
+              <textarea type="text" name="address" placeholder="Taman Rahayu Regency 2 A8/NO15, Bekasi, West Java" v-model="form.address" rows="3" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100"></textarea>
+            </div>
+            <div v-if="errors.address" class="p-1 absolute text-red-500 text-sm italic">{{errors.address[0]}}</div>
           </div>
         </div>
-      </div>
-      <div class="px-4 md:px-8 font-bold text-gray-800 text-xl md:mt-8 mb-8">Checkout</div>
-      <div class="px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <div class="relative">
-          <div class="font-medium text-gray-600 mb-2">Phone</div>
-          <div class="w-full relative">
-            <div class="absolute codephone font-medium mx-3 text-gray-600">+62</div>
-            <input type="text" name="phone" placeholder="8986332827" v-model="form.phone_number" class="pl-12 text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
-          </div>
-          <div v-if="errors.phone_number" class="p-1 absolute text-red-500 text-sm italic">{{errors.phone_number[0]}}</div>
+        <div class="font-semibold text-gray-600 mb-4">Send with</div>
+        <div class="pb-8 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 px-4 md:px-16 select-none relative">
+          <button v-for="(courier, index) in couriers" :key="index" @click="form.courier = courier.name" :class="`${form.courier == courier.name?'bg-blue-200 border-blue-300':'bg-white'} focus:outline-none flex items-center h-28 md:h-48 lg:h-auto justify-center border-2 hover:border-blue-300 rounded p-6 md:p-9`">
+            <img :src="courier.img" class="w-40">
+          </button>
+          <div v-if="errors.courier" class="p-1 absolute bottom-0 text-red-500 text-sm italic">{{errors.courier[0]}}</div>  
         </div>
-        <div class="relative">
-          <div class="font-medium text-gray-600 mb-2">Zipcode</div>
-          <div class="w-full">
-            <input type="text" name="zipcode" placeholder="17320" v-model="form.zipcode" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100">
-          </div>
-          <div v-if="errors.zipcode" class="p-1 absolute text-red-500 text-sm italic">{{errors.zipcode[0]}}</div>
-        </div>
-        <div class="relative">
-          <div class="font-medium text-gray-600 mb-2">Address</div>
-          <div class="w-full">
-            <textarea type="text" name="address" placeholder="Taman Rahayu Regency 2 A8/NO15, Bekasi, West Java" v-model="form.address" rows="3" class="text-gray-600 w-full bg-white rounded focus:outline-none px-4 py-2 border focus:ring-2 select-none transition focus:ring-gray-300 focus:ring-offset-4 focus:ring-offset-gray-100"></textarea>
-          </div>
-          <div v-if="errors.address" class="p-1 absolute text-red-500 text-sm italic">{{errors.address[0]}}</div>
-        </div>
-      </div>
-      <div class="px-4 md:px-8 font-semibold text-gray-600 mb-4">Send with</div>
-      <div class="pb-8 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 px-4 md:px-16 select-none relative">
-        <button v-for="(courier, index) in couriers" :key="index" @click="form.courier = courier.name" :class="`${form.courier == courier.name?'bg-blue-200 border-blue-300':'bg-white'} focus:outline-none flex items-center h-28 md:h-48 lg:h-auto justify-center border-2 hover:border-blue-300 rounded p-6 md:p-9`">
-          <img :src="courier.img" class="w-40">
-        </button>
-        <div v-if="errors.courier" class="p-1 absolute bottom-0 text-red-500 text-sm italic">{{errors.courier[0]}}</div>  
       </div>
     </div>
 
@@ -131,19 +115,23 @@
 import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import api from '../axios'
-import Iconbar from "../components/iconbar.vue"
-import Toast from "../components/toast.vue"
 import cart from "../store/cart"
 import { computed } from '@vue/runtime-core'
-import auth from '../store/auth'
 import helper from '../helper'
+import toastStore from '../store/toast'
 import { onMounted } from 'vue'
+
+import Toast from "../components/toast.vue"
+import Iconbar from "../components/iconbar.vue"
+import MobileHeader from "../components/mobileHeader.vue"
 export default {
   components: {
+    Toast,
     Iconbar,
-    Toast
+    MobileHeader
   },
   setup() {
+    const toast = computed(()=> toastStore.state)
     const router = useRouter()
     const loading = ref(false)
     const couriers = ref([{
@@ -180,20 +168,8 @@ export default {
       }
     })
     const errors = ref({})
-    const toast = ref(false)
-    const grandTotal = computed(()=>{
-      return cart.getters.cartTotalPrice()
-    })
-    const totalQuantity = computed(()=>{
-      return cart.getters.cartTotalQuantity()
-    })
-
-    const user = computed(()=>{
-      return auth.state.user
-    })
-    const carts = computed(()=>{
-      return cart.state.cart
-    })
+    const grandTotal = computed(()=> cart.getters.cartTotalPrice())
+    const totalQuantity = computed(()=> cart.getters.cartTotalQuantity())
 
     const {currencyFormat, stockFormat} = helper()
 
@@ -205,25 +181,26 @@ export default {
 
     const sendOrder = ()=>{
       loading.value = true
-      api.post('/api/orders', form).then(()=>{
+      api.post('/api/orders', form).then(res=>{
         loading.value = false
-        router.push({name: 'Home', params: {toast: true}})
+        window.scrollTo(0,0)
+        router.push({name: 'Home'})
+        toastStore.mutations.setToast('success', res.data)
       }).catch(err => {
         loading.value = false
-        toast.value = true
-        const removeToast = ()=>{
-          toast.value = false
-        }
-        setTimeout(removeToast, 3000)
         window.scrollTo(0,0)
         errors.value = err.response.data.errors
+        if (errors.value.product) {
+          toastStore.mutations.setToast('success', errors.value.product[0])
+        } else {
+          toastStore.mutations.setToast('error', 'some error occured')
+        }
       }).finally(()=>{
         loading.value = false
       })
     }
-    
 
-    return { couriers, user, carts, courierPrice, form, sendOrder, errors, totalQuantity, grandTotal, toast, currencyFormat, stockFormat, loading }
+    return { toast, loading, couriers, courierPrice, form, sendOrder, errors, totalQuantity, grandTotal, currencyFormat, stockFormat }
   },
 }
 </script>

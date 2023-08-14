@@ -11,12 +11,12 @@
                         <svg class="text-gray-700 w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M16 21l-4.762-8.73L15 6l8 15h-7zM8 10l6 11H2l6-11zM5.5 8a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                     </template>
                     <template v-if="product.favorited">
-                        <button @click="setFavorite(product.id, 'delete')" :disabled="disableFavorite" :class="`${ disableFavorite ? 'text-gray-300' : 'text-yellow-400' } focus:outline-none absolute top-1 right-1 bg-white shadow rounded p-2`">  
+                        <button @click="setFavorite(product.id, 'delete')" :disabled="disableFavorite" :class="`${ disableFavorite ? 'text-gray-300' : 'text-yellow-400' } hover:bg-gray-100 focus:outline-none absolute top-1 right-1 bg-white shadow rounded p-2`">  
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18.26l-7.053 3.948 1.575-7.928L.587 8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575 7.928z"/></svg>
                         </button>
                     </template>
                     <template v-else>
-                        <button @click="setFavorite(product.id, 'add')" :disabled="disableFavorite" :class="`${ disableFavorite ? 'text-gray-300' : 'text-yellow-400' } focus:outline-none absolute top-1 right-1 bg-white shadow rounded p-2`">
+                        <button @click="setFavorite(product.id, 'add')" :disabled="disableFavorite" :class="`${ disableFavorite ? 'text-gray-300' : 'text-yellow-400' } hover:bg-gray-100 focus:outline-none absolute top-1 right-1 bg-white shadow rounded p-2`">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18.26l-7.053 3.948 1.575-7.928L.587 8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773 3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572 3.573 3.305-.949 4.773L12 15.968z"/></svg>
                         </button>
                     </template>
@@ -26,14 +26,14 @@
                         {{product.created_at}}
                     </div>
                     <router-link :to="`/product/${product.slug}`">
-                    <div class="text-gray-800 hover:text-blue-500 font-bold text-base lg:text-lg mt-3 lg:mb-1 truncate two-lines leading-24">
+                    <div class="text-gray-800 hover:text-blue-500 font-bold text-sm lg:text-base mt-1 lg:mt-3 mb-1 truncate two-lines leading-2">
                         {{product.title}}
                     </div>
                     </router-link>
-                    <div class="text-gray-500 mb-4 text-sm lg:text-base truncate two-lines h-16">{{product.category}}</div>
-                    <div class="absolute bottom-3 flex flex-wrap flex-col md:items-center md:flex-row gap-x-2"> 
-                        <div class="text-blue-500 font-bold text-base lg:text-lg leading-5">${{currencyFormat(product.price)}}</div> 
-                        <div class="text-gray-500 font-medium">/ {{stockFormat(product.stock)}} pcs</div>
+                    <div class="text-gray-500 mb-4 text-xs lg:text-base truncate two-lines h-16">{{product.category}}</div>
+                    <div class="absolute bottom-3 flex flex-wrap flex-col-reverse md:items-end md:flex-row gap-x-2"> 
+                        <div class="text-blue-500 font-bold text-sm lg:text-base lg:leading-5">${{currencyFormat(product.price)}}</div> 
+                        <div class="text-gray-500 font-medium text-xs lg:text-base flex"><span class="hidden md:block mr-2">/</span> {{stockFormat(product.stock)}} pcs</div>
                     </div>
                     <button title="Add To Cart" @click="addToCart(product)" class="absolute bottom-3 right-3 bg-blue-500 text-white hover:shadow-lg shadow-blue-500 cart transition transform active:translate-y-1 focus:outline-none p-1.5 rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 16V4H2V2h3a1 1 0 0 1 1 1v12h12.438l2-8H8V5h13.72a1 1 0 0 1 .97 1.243l-2.5 10a1 1 0 0 1-.97.757H5a1 1 0 0 1-1-1zm2 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm12 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
