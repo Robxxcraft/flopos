@@ -38,7 +38,6 @@ class OrderController extends Controller
     }
 
     public function admin(Request $request){
-        // $orders = Order::with(['user', 'orderdetails.product'])->get();
         $orders = Order::with('user')->when($request->has('search'), function($q)use($request){
             $q->where('token', 'like', '%'.$request->search.'%')->orWhere('total_amount', 'like', '%'.$request->search.'%')->orWhere('total_amount', 'like', '%'.$request->search.'%')->orWhere('courier', 'like', '%'.$request->search.'%')->orWhere('payment', 'like', '%'.$request->search.'%')->orWhere('address', 'like', '%'.$request->search.'%')->orWhere('zipcode', 'like', '%'.$request->search.'%')->orWhere('id', (int)$request->search);
         })->latest()->simplePaginate(10);
@@ -60,7 +59,7 @@ class OrderController extends Controller
     public function create(Request $request){
         $request->validate([
             'phone' => 'required|numeric',
-            'address' => 'required|min:5|max:400',
+            'address' => 'required|min:5|max:500',
             'zipcode' => 'required|numeric',
             'courier' => 'required',
             'total_amount' => 'min:1',
@@ -68,9 +67,9 @@ class OrderController extends Controller
         ]);
         
 
-        $carts = Auth::user('sanctum')->cartAll();
+        $carts = Auth::user('sanctum')->cartAll;
         if ($carts->count() < 1) {
-            throw ValidationException::withMessages(['product' => 'Min 1 product to create order']);
+            throw ValidationException::withMessages(['product' => 'Min 1 quantity of product to create an order']);
         }
 
         $total_amount = 0;
@@ -118,19 +117,20 @@ class OrderController extends Controller
                     'quantity' => $cart->quantity,
                 ]);
                 $product = Product::find($cart->product_id);
-                $product->stock -= $cart->quantity;
+                $product->update([
+                    'stock' => (int)$product->stock - (int) $cart->quantity
+                ]);
             }
 
-            $carts = Auth::user('sanctum')->cart;
             foreach ($carts as $cart) {
                 $cart = Cart::find($cart->id);
                 $cart->delete();
             }
 
-            return response()->json('Order Created Successfully', 201);
+            return response()->json(['success' => 'Order created successfully'], 201);
         }
 
-        return response()->json('Some Error Occured', 500);
+        return response()->json('Some error occured', 500);
 
     }
 

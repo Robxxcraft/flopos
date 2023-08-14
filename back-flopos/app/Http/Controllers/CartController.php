@@ -68,7 +68,7 @@ class CartController extends Controller
     }
 
     public function cartClear(){
-        $carts = Auth::user()->cart;
+        $carts = Auth::user()->cart();
         foreach ($carts as $cart) {
             $cart = Cart::find($cart->id);
             $cart->delete();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AllCategoryResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\HomeCategoryResource;
 use App\Models\Category;
@@ -14,8 +13,8 @@ class CategoryController extends Controller
 {
     public function all()
     {
-        $categories = Category::all();
-        return AllCategoryResource::collection($categories);
+        $categories = Category::all(['id', 'name']);
+        return response()->json($categories, 200);
     }
 
     public function index(Request $request)
