@@ -1,46 +1,53 @@
 <template>
-<Transition name="slideY">
-  <Toast v-if="toast" type="error">
-    <template #text>
-      {{toastContent}}
-    </template>
-  </Toast>
-</Transition>
-  <div class="main w-full bg-slate-100">
-    <Header />
-    <div class="py-6 lg:py-8 px-4 md:px-8 lg:px-12">
-      <router-link to="/admin/categories">
-        <div class="flex items-center">
-          <div class="bg-blue-500 hover:bg-blue-600 text-white rounded-sm px-1 shadow-sm hover:shadow-md cursor-pointer" @click="back">
-            <svg class="w-7 h-7 md:w-8 md:h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.828 12l2.829 2.828-1.414 1.415L9 12l4.243-4.243 1.414 1.415L11.828 12z"/></svg>
-          </div>
-          <div class="ml-2 font-bold tracking-wide text-blue-500">Back</div>
+  <Transition name="slideY">
+      <Toast v-if="toast.status" :type="toast.type">
+        <template #text>
+          {{toast.content}}
+        </template>
+    </Toast>
+  </Transition>
+  <div class="w-full bg-slate-100">
+    <div class="py-6 lg:py-8 px-4 md:px-8 lg:px-12 flex justify-center">
+        <div class="bg-white w-full max-w-2xl rounded-lg shadow-sm py-5">
+            <div class="text-xl text-blue-500 text-center font-bold mb-2">Create new category</div>
+            <form class="w-full mx-auto px-6 md:px-8" @submit.prevent="saveCategory">
+                <div class="flex max-w-lg mx-auto flex-wrap px-0 md:px-8 flex-col">
+                    <div class="relative pb-5 flex-2">
+                        <label class="tracking-wide text-gray-800 ml-2 font-medium">
+                            Name
+                        </label>
+                        <input class="focus:outline-none focus:ring-2 select-none transition focus:ring-blue-300 focus:ring-offset-4 focus:ring-offset-blue-100 mt-1.5 w-full bg-gray-50 text-gray-700 border border-gray-300 focus:border-blue-300 rounded py-2 px-3 mb-3" v-model="form.name" placeholder="Enter title" type="text">
+                        <div v-if="errors.name" class="bottom-0 absolute p-1 text-red-500 text-sm italic">{{errors.name[0]}}</div>
+                    </div>
+                    <div class="mt-3 w-full flex items-start justify-end">
+                        <router-link :to="{name: 'ManageCategory' }" class="text-gray-500 tracking-wide bg-gray-200 py-2 px-3 rounded text-sm font-bold shadow-sm transition border-3 border-gray-500 hover:bg-gray-500 hover:text-white mr-3">Back</router-link>
+                        <button class="text-white tracking-wide bg-blue-500 py-2 px-3 rounded text-sm font-bold shadow-sm transition focus:outline-none hover:bg-blue-600" type="submit">
+                            <template v-if="loading">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: 0; display: block; shape-rendering: auto;" width="20" height="20" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                    <circle cx="50" cy="50" fill="none" stroke="#ffffff" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                                        <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50360 50 50" keyTimes="01"></animateTransform>
+                                    </circle>
+                                </svg>
+                            </template>
+                            <template v-else>
+                                Create
+                            </template>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-      </router-link>
-      <div class="text-xl text-gray-800 font-bold mt-4 mb-2">Create Category</div>
-      <form class="w-full mx-auto md:px-8 py-4" @submit.prevent="saveCategory">
-          <div class="flex max-w-lg mx-auto flex-wrap px-0 md:px-8  flex-col">
-              <div class="flex-2 mb-3">
-                <label class="tracking-wide text-gray-700 ml-2">
-                    Name
-                </label>
-                <input class="focus:outline-none mt-2 transition w-full bg-gray-50 text-gray-700 border-2 border-gray-300 rounded py-3 px-4 mb-3 focus:border-blue-500" v-model="form.name" type="text">
-                <div v-if="errors.name" class="absolute p-1 text-red-500 text-sm italic">{{errors.name[0]}}</div>
-              </div>
-              <div class="flex-1 text-right">
-                <button class="text-white tracking-wide bg-blue-500 py-2 px-3 rounded text-sm font-bold shadow-sm transition focus:outline-none hover:bg-blue-600 hover:shadow-lg" type="submit">Save</button>
-              </div>
-          </div>
-      </form>
     </div>
-    </div>
+  </div>
 </template>
 
 
 <script>
-import { reactive, ref } from '@vue/reactivity';
-import { useRouter } from 'vue-router';
-import api from '../../../axios';
+import { reactive, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '../../../axios'
+import toastStore from '../../../store/toast'
+
 import Header from '../../../components/header.vue'
 import Toast from '../../../components/toast.vue'
 export default {
@@ -49,31 +56,29 @@ export default {
     Toast
   },
   setup() {
-    const toast = ref(false)
-    const toastContent = ref('')
-    const router = useRouter();
+    const toast = computed(()=> toastStore.state )
+    const router = useRouter()
     const form = reactive({
       name: ''
-    });
-
-    const errors = ref({});
+    })
+    const loading = ref(false)
+    const errors = ref({})
 
     const saveCategory = () => {
-      api.post('/api/categories', form).then(()=>{
-        router.push({name: 'ManageCategory', params: {toast: 'Category has been created'}});
+      loading.value = true
+      api.post('/api/categories', form).then(res=>{
+        loading.value = false
+        toastStore.mutations.setToast('success', res.data)
+        router.push({name: 'ManageCategory'})
       }).catch(err => {
-        toast.value = true
-        toastContent.value = 'Some error occurred'
-        function removeToast(){
-          toast.value = false
-        }
-        setTimeout(removeToast, 3000)
+        loading.value = false
+        toastStore.mutations.setToast('error', 'some error occured')
         window.scrollTo(0,0)
         errors.value = err.response.data.errors
       })
     }
 
-    return { toast, toastContent, saveCategory, errors, form }
+    return { toast, saveCategory, errors, form, loading }
   }
-};
+}
 </script>

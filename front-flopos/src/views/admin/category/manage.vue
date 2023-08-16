@@ -1,6 +1,6 @@
 <template>
   <Transition name="slideY">
-      <Toast v-if="toast.status" type="success">
+      <Toast v-if="toast.status" :type="toast.type">
         <template #text>
           {{toast.content}}
         </template>
@@ -15,7 +15,7 @@
           <router-link to="/admin/categories/create">
             <div class="cursor-pointer text-blue-500 hover:text-blue-600 hover:underline flex items-end gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
-              Add
+              create new category
             </div>
           </router-link>
         </div>
@@ -30,7 +30,7 @@
         <table class="w-full">
             <thead>
               <tr class="text-white bg-blue-500 text-sm text-left">
-                <th class="p-3 font-semibold tracking-wide">ID</th>
+                <th class="p-3 font-semibold tracking-wide">Id</th>
                 <th class="p-3 font-semibold tracking-wide">Name</th>
                 <th class="p-3 font-semibold tracking-wide">Slug</th>
                 <th class="p-3 font-semibold tracking-wide">Created At</th>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { onMounted, ref  } from "vue"
+import { onMounted, ref, computed  } from "vue"
 import api from '../../../axios'
 import Header from '../../../components/header.vue'
 import Toast from '../../../components/toast.vue'
@@ -109,9 +109,7 @@ export default {
     Pagination
   },
   setup() {
-    const toast = computed(()=> {
-      return toastStore.state
-    })
+    const toast = computed(()=> toastStore.state )
     const categories = ref([])
     const paginationData = ref({
       currentPage: 1,
@@ -123,7 +121,6 @@ export default {
     const getCategories = (page) => {
       scrollTo(0,0)
       sloading.value = true
-      currentPage.value = page
       paginationData.value.currentPage = page
       api.get(`/api/categories?page=${page}&search=${search.value}`).then(res => {
         categories.value = res.data.data
@@ -131,10 +128,6 @@ export default {
         paginationData.value.lastPage = res.data.meta.last_page
         sloading.value = false
       })
-    }
-    
-    const removeToast = () => {
-      toastStore.mutations.clearToast()
     }
 
     onMounted(() => {
@@ -146,13 +139,14 @@ export default {
     }
 
     const deleteCategory = (id)=>{
+      const category = categories.value.findIndex(i => i.id == id)
+      categories.value.splice(category, 1)
       api.delete(`/api/categories/${id}`).then(res=>{
-        toastStore.mutations.setToast(true, res.data)
-        setTimeout(removeToast, 3000)
+        toastStore.mutations.setToast('success', res.data)
       })
     }
 
-    return { toast, paginationData, search, searching, nextLink, sloading, categories, getCategories, deleteCategory }
+    return { toast, paginationData, search, searching, sloading, categories, getCategories, deleteCategory }
   }
 }
 </script>

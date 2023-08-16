@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -40,6 +41,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected function serializeDate(DateTimeInterface $date) {
+        return \Carbon\Carbon::parse($date)->locale('id')->translatedFormat('d F Y');
+    }
 
     public function cart(){
         return $this->hasMany(Cart::class)->with('product.category')->paginate(10);

@@ -1,12 +1,12 @@
 <template>
   <Transition name="slideY">
-    <Toast v-if="toast.status" type="success">
+    <Toast v-if="toast.status" :type="toast.type">
       <template #text>
         {{toast.content}}
       </template>
     </Toast>
   </Transition>
-  <div class="main w-full bg-slate-100 pl-3">
+  <div class="main w-full bg-slate-100 lg:pl-3">
     <Header />
     <div class="py-6 lg:py-8 px-4 md:px-8 lg:px-12">
       <div class="text-xl text-gray-700 font-bold mb-2">Manage Products</div>
@@ -31,7 +31,7 @@
         <table class="shadow shadow-gray-100 w-full">
             <thead>
               <tr class="text-white bg-blue-500 text-sm text-left">
-                <th class="p-3 font-semibold tracking-wide">ID</th>
+                <th class="p-3 font-semibold tracking-wide">Id</th>
                 <th width="160" class="p-3 font-semibold tracking-wide">Photo</th>
                 <th class="p-3 font-semibold tracking-wide">Title</th>
                 <th class="p-3 font-semibold tracking-wide">Category</th>
@@ -114,76 +114,76 @@
         </table>
       </div>
       <!--mobile-->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
-          <template v-if="!sloading">
-              <div class="bg-white p-4 rounded shadow-sm" v-for="(product, index) in products" :key="index">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="flex items-center">
-                    <router-link :to=" `/admin/products/${product.id}/edit`" class="text-blue-500 mr-2 font-bold hover:underline">{{product.id}}</router-link>
-                    <div class="text-gray-400 text-xs ml-1 font-medium">{{product.created_at}}</div>      
-                  </div>
-                  <div class="flex">
-                    <router-link :to=" `/admin/products/${product.id}/edit`" class="text-blue-500 hover:bg-blue-100 rounded-md 0 font-bold focus:outline-none hover:text-blue-600 mr-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"/></svg></router-link>
-                    <button @click.prevent="deleteProduct(product.id)" class="text-red-500 hover:bg-red-100  rounded-md font-bold focus:outline-none hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/></svg></button>
-                  </div>  
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
+        <template v-if="!sloading">
+            <div class="bg-white p-4 rounded shadow-sm" v-for="(product, index) in products" :key="index">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center">
+                  <router-link :to=" `/admin/products/${product.id}/edit`" class="text-blue-500 mr-2 font-bold hover:underline">{{product.id}}</router-link>
+                  <div class="text-gray-400 text-xs ml-1 font-medium">{{product.created_at}}</div>      
                 </div>
-                <div class="ml-8">
-                  <div class="rounded mb-2 overflow-hidden flex h-28 w-40 justify-center items-center bg-gray-300">
-                    <template v-if="product.photo">
-                      <img :src="product.photo" class="brightness-95 w-full h-full object-cover" :alt="product.slug">
-                    </template>
-                    <template v-else>
-                      <svg class="text-gray-700 my-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M16 21l-4.762-8.73L15 6l8 15h-7zM8 10l6 11H2l6-11zM5.5 8a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                    </template>
-                  </div>
-                  <div class="text-sm truncate two-lines text-gray-700 font-bold">{{product.title}}</div>
-                  <div class="text-xs truncate two-lines text-gray-500 mb-3">{{product.slug}}</div>
-                  <div class="flex items-center border-b pb-1 mb-2">
-                    <div class="basis-1/3 font-medium text-gray-600 text-sm">
-                      Price
-                    </div>
-                    <div class="basis-2/3">
-                      <div class="text-sm text-blue-500 font-bold">${{currencyFormat(product.price)}}</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center border-b pb-1 mb-2">
-                    <div class="basis-1/3 font-medium text-gray-600 text-sm">
-                      Category
-                    </div>
-                    <div class="basis-2/3 whitespace-nowrap">
-                      <div class="inline-block bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-semibold truncate">{{product.category}}</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center border-b pb-1 mb-2">
-                    <div class="basis-1/3 font-medium text-gray-600 text-sm">
-                      Stock
-                    </div>
-                    <div class="basis-2/3">
-                      <div class="text-sm truncate font-semibold text-gray-700">{{stockFormat(product.stock)+' pcs'}}</div>
-                    </div>
-                  </div>
-                  <div class="mt-5 pl-2 pb-2 inline-block border-b font-medium text-gray-600 text-sm">Description</div>
-                  <div class="bg-gray-100 rounded mt-2 p-3 text-sm">{{product.description}}</div>
-                </div>
-              </div>
-          </template>
-          <template v-else>
-            <div class="bg-white p-4 rounded shadow-sm" v-for="i in 4" :key="i">
-              <div class="flex items-center mb-4">
-                <div class="w-6 h-4 rounded bg-gray-200 animate-pulse"></div>
-                <div class="ml-2 w-28 h-4 rounded bg-gray-200 "></div>      
+                <div class="flex">
+                  <router-link :to=" `/admin/products/${product.id}/edit`" class="text-blue-500 hover:bg-blue-100 rounded-md 0 font-bold focus:outline-none hover:text-blue-600 mr-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"/></svg></router-link>
+                  <button @click.prevent="deleteProduct(product.id)" class="text-red-500 hover:bg-red-100  rounded-md font-bold focus:outline-none hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3zm1 2H6v12h12V8zm-9 3h2v6H9v-6zm4 0h2v6h-2v-6zM9 4v2h6V4H9z"/></svg></button>
+                </div>  
               </div>
               <div class="ml-8">
-                <div class="animate-pulse rounded flex h-28 w-40 justify-center items-center bg-gray-300"></div>
-                <div class="mt-4 w-40 h-4 rounded bg-gray-200 animate-pulse"></div>
-                <div class="mt-2 w-48 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
-                <div class="mt-2 w-40 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
-                <div class="mt-2 w-24 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
-                <div class="mt-2 w-36 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
+                <div class="rounded mb-2 overflow-hidden flex h-28 w-40 justify-center items-center bg-gray-300">
+                  <template v-if="product.photo">
+                    <img :src="product.photo" class="brightness-95 w-full h-full object-cover" :alt="product.slug">
+                  </template>
+                  <template v-else>
+                    <svg class="text-gray-700 my-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M16 21l-4.762-8.73L15 6l8 15h-7zM8 10l6 11H2l6-11zM5.5 8a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                  </template>
+                </div>
+                <div class="text-sm truncate two-lines text-gray-700 font-bold">{{product.title}}</div>
+                <div class="text-xs truncate two-lines text-gray-500 mb-3">{{product.slug}}</div>
+                <div class="flex items-center border-b pb-1 mb-2">
+                  <div class="basis-1/3 font-medium text-gray-600 text-sm">
+                    Price
+                  </div>
+                  <div class="basis-2/3">
+                    <div class="text-sm text-blue-500 font-bold">${{currencyFormat(product.price)}}</div>
+                  </div>
+                </div>
+                <div class="flex items-center border-b pb-1 mb-2">
+                  <div class="basis-1/3 font-medium text-gray-600 text-sm">
+                    Category
+                  </div>
+                  <div class="basis-2/3 whitespace-nowrap">
+                    <div class="inline-block bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-semibold truncate">{{product.category}}</div>
+                  </div>
+                </div>
+                <div class="flex items-center border-b pb-1 mb-2">
+                  <div class="basis-1/3 font-medium text-gray-600 text-sm">
+                    Stock
+                  </div>
+                  <div class="basis-2/3">
+                    <div class="text-sm truncate font-semibold text-gray-700">{{stockFormat(product.stock)+' pcs'}}</div>
+                  </div>
+                </div>
+                <div class="mt-5 pl-2 pb-2 inline-block border-b font-medium text-gray-600 text-sm">Description</div>
+                <div class="bg-gray-100 rounded mt-2 p-3 text-sm">{{product.description}}</div>
               </div>
             </div>
-          </template>
-        </div>
+        </template>
+        <template v-else>
+          <div class="bg-white p-4 rounded shadow-sm" v-for="i in 4" :key="i">
+            <div class="flex items-center mb-4">
+              <div class="w-6 h-4 rounded bg-gray-200 animate-pulse"></div>
+              <div class="ml-2 w-28 h-4 rounded bg-gray-200 "></div>      
+            </div>
+            <div class="ml-8">
+              <div class="animate-pulse rounded flex h-28 w-40 justify-center items-center bg-gray-300"></div>
+              <div class="mt-4 w-40 h-4 rounded bg-gray-200 animate-pulse"></div>
+              <div class="mt-2 w-48 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
+              <div class="mt-2 w-40 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
+              <div class="mt-2 w-24 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
+              <div class="mt-2 w-36 h-4 rounded-sm bg-gray-200 animate-pulse"></div>
+            </div>
+          </div>
+        </template>
+      </div>
       <Pagination v-if="products.length > 0 && !sloading" :currentPage="paginationData.currentPage" :lastPage="paginationData.lastPage" :nextLink="paginationData.nextLink" :getData="getProducts" />
     </div>
   </div>
@@ -235,6 +235,8 @@ export default {
     }
 
     const deleteProduct = (id)=>{
+      const product = products.value.findIndex(i => i.id == id)
+      products.value.splice(product, 1)
       api.delete(`/api/products/${id}`).then(res=>{
         toastStore.mutations.setToast('success', res.data)
       })

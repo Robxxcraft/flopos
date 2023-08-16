@@ -4,15 +4,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChartController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SalesOrderController;
+use App\Http\Controllers\UserController;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,9 +64,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::post('/orders/{id}', [OrderController::class, 'update']);
     Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+
+    Route::get('/users', [UserController::class, 'index']);
 });
 
-Route::get('/orders', [OrderController::class, 'adminOrders']);
 Route::get('/all/categories', [CategoryController::class, 'all']);
 Route::get('/home/categories', [CategoryController::class, 'home']);
 Route::get('/home/products', [ProductController::class, 'home']);
