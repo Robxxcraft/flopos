@@ -183,12 +183,10 @@ export default {
       loading.value = true
       api.post('/api/orders', form).then(res=>{
         loading.value = false
-        window.scrollTo(0,0)
         router.push({name: 'Home'})
         toastStore.mutations.setToast('success', res.data)
       }).catch(err => {
         loading.value = false
-        window.scrollTo(0,0)
         errors.value = err.response.data.errors
         if (errors.value.product) {
           toastStore.mutations.setToast('success', errors.value.product[0])

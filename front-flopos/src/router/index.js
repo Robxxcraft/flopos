@@ -3,13 +3,16 @@ import auth from '../store/auth'
 import { computed } from 'vue'
 
 const router = createRouter({
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: () => import('../views/home.vue'),
-      props: true
+      component: () => import('../views/home.vue')
     },
     {
       path: '/:catchAll(.*)',
@@ -75,8 +78,7 @@ const router = createRouter({
         {
           path: 'categories',
           name: 'ManageCategory',
-          component: () => import('../views/admin/category/manage.vue'),
-          props: true
+          component: () => import('../views/admin/category/manage.vue')
         },
         {
           path: 'categories/create',
@@ -89,8 +91,7 @@ const router = createRouter({
         {
           path: 'products',
           name: 'ManageProduct',
-          component: () => import('../views/admin/product/manage.vue'),
-          props: true
+          component: () => import('../views/admin/product/manage.vue')
         },
         {
           path: 'products/create',

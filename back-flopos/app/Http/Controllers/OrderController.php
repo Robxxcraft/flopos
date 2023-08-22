@@ -127,7 +127,7 @@ class OrderController extends Controller
                 $cart->delete();
             }
 
-            return response()->json(['success' => 'Order created successfully'], 201);
+            return response()->json('Order created successfully', 201);
         }
 
         return response()->json('Some error occured', 500);
