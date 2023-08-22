@@ -116,7 +116,7 @@ class ProductController extends Controller{
     public function destroy($id){
         $product = Product::findOrFail($id);
         //deploy
-        if (isset($product->photo)) {
+        if (isset($product->photo) && strpos($product->photo, 'cloudinary') !== false) {
             Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
         }
         $product->delete();
