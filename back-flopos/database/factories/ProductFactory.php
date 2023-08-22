@@ -16,15 +16,15 @@ class ProductFactory extends Factory
     public function definition()
     {
         $productTitle = $this->faker->text(rand(10, 40));
-        $categoryLengthId = Category::count();
+        $categories = array(Category::pluck('id'));
         return [
             'title' => $productTitle,
             'slug' => Str::slug($productTitle),
             'description' => $this->faker->realText(100),
-            'category_id' => $this->faker->numberBetween(1, $categoryLengthId),
+            'category_id' => array_rand($categories)+1,
             'price' => $this->faker->biasedNumberBetween(5, 2500),
             'stock' => $this->faker->numberBetween(1, 100),
-            'photo' => $this->faker->imageUrl
+            'photo' => 'https://picsum.photos/id/'.rand(10, 1084).'/600/400'
         ];
     }
 }

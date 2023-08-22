@@ -98,7 +98,9 @@ class ProductController extends Controller{
         ]);
         // deploy
         if ($request->hasFile('photo')) {
-            Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
+            if (strpos($product->photo, 'cloudinary') !== false) {
+                Cloudinary::destroy('pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id);
+            }
             $uploadImg = Cloudinary::upload($request->file('photo')->getRealPath(), [
                 'folder' =>  'pos',
                 'public_id' => 'pos_product_'.$product->created_at->format('Y-m-d').'_'.$product->id,
