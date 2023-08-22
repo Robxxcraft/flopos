@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'title' => $productTitle,
             'slug' => Str::slug($productTitle),
             'description' => $this->faker->realText(100),
-            'category_id' => array_rand($categories)+1,
+            'category_id' => $categories[array_rand($categories, 1)],
             'price' => $this->faker->biasedNumberBetween(5, 2500),
             'stock' => $this->faker->numberBetween(1, 100),
             'photo' => 'https://picsum.photos/id/'.rand(10, 1084).'/600/400'
